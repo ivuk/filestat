@@ -5,22 +5,33 @@
 GetListOfFiles()
 {
 # Check if the target directory exists
-# If it does not, exit
-# If it is a symlink, exit
-# Otherwise, all is well, list all the files in it
-if [ ! -d "$1" ]; then
-	echo "Directory $1 does not exist."
-	exit 14
-elif [ -L "$1" ]; then
-	echo "Directory $1 is a symlink."
-	exit 14
+# And that it is not a symlink
+# Otherwise exit
+if [[ -d "$1" && ! -L "$1" ]]; then
+# List only files, ignore other things
+	ArrayOfFiles=($(ls -l "$1" | awk '/^-/ {print $NF}'))
+	for elem in ${!ArrayOfFiles[*]}; do
+		printf "%s\n" ${ArrayOfFiles[$elem]}
+		#printf "%4d: %s\n" $elem ${ArrayOfFiles[$elem]}
+	done
 else
-	List=$(ls -1 "$1")
-	echo "$List"
+	echo "$1 does not exist or is not a directory."
+	exit 14
 fi
+
+# Get some serious work done
+GetFilesData "${ArrayOfFiles[@]}"
 }
 
-#GetFilesData
+GetFilesData()
+{
+for i in "${ArrayOfFiles[@]}"; do
+	ArrayOfFilesInfo=($(file "$i"))
+	for elem in ${!ArrayOfFiles[*]}; do
+		printf "%s\n" ${ArrayOfFiles[$elem]}
+	done
+done
+}
 
 # Parse command line options
 while getopts ":ahvd:" option; do
