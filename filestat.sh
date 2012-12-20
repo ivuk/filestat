@@ -20,10 +20,12 @@ GetFilesData()
 {
 declare -A ArrayOfFilesInfo
 for elem in "${ArrayOfFiles[@]}"; do
-	ArrayOfFilesInfo=(["$elem"]=$(file "$elem"))
-# FIXME - I have no idea why this works
-	echo "${ArrayOfFilesInfo[@]/%/$'\n'}" | column
+	ArrayOfFilesInfo+=(["$elem"]=$(file -b "$elem"))
 done
+
+for elem in "${!ArrayOfFilesInfo[@]}"; do
+	echo "$elem%${ArrayOfFilesInfo[$elem]}"
+done | column -t -s '%'
 }
 
 # Parse command line options
