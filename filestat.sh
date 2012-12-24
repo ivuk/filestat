@@ -40,8 +40,7 @@ if [ "$VerbositySet" -eq 1 ]; then
 	done | column -t -s '%'
 else
 # FIXME - is it better to use printf or just for?
-# FIXME - find a replacement for double sort and uniq combo
-	printf "%s\n" "${ArrayOfFilesInfo[@]}" | sort | uniq -c | sort
+	printf "%s\n" "${ArrayOfFilesInfo[@]}" | sort | uniq -c
 #	for elem in "${!ArrayOfFilesInfo[@]}"; do
 #		echo "${ArrayOfFilesInfo[$elem]}"
 #	done | sort | uniq -c
