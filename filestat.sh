@@ -1,5 +1,8 @@
 #!/bin/bash
-# vim: ts=2
+# vim: ts=2 tw=80
+
+# Reset ouput verbosity
+VerbositySet=0
 
 # Get the list of files in the target folder
 GetListOfFiles()
@@ -18,21 +21,37 @@ fi
 
 GetFilesData()
 {
+# Declare an associative array
+# Stick the needed data into it
 declare -A ArrayOfFilesInfo
 for elem in "${ArrayOfFiles[@]}"; do
 	ArrayOfFilesInfo+=(["$elem"]=$(file -b "$elem"))
 done
 
-for elem in "${!ArrayOfFilesInfo[@]}"; do
-	echo "$elem%${ArrayOfFilesInfo[$elem]}"
-done | column -t -s '%'
+# Show the total number of files
+echo "Total number of files in the target folder: ${#ArrayOfFilesInfo[@]}"
+
+# Check if verbose is set by passing -a argument
+# If it is, print the filenames
+# Else print the number of elements by type
+if [ "$VerbositySet" -eq 1 ]; then
+	for elem in "${!ArrayOfFilesInfo[@]}"; do
+		echo "$elem%${ArrayOfFilesInfo[$elem]}"
+	done | column -t -s '%'
+else
+# FIXME - is it better to use printf or just for?
+	printf "%s\n" "${ArrayOfFilesInfo[@]}"| sort | uniq -c
+#	for elem in "${!ArrayOfFilesInfo[@]}"; do
+#		echo "${ArrayOfFilesInfo[$elem]}"
+#	done | sort | uniq -c
+fi
 }
 
 # Parse command line options
 while getopts ":ahvd:" option; do
 	case $option in
 		a)
-			echo '-a triggered'
+			VerbositySet=1
 			;;
 		d)
 			GetListOfFiles "$OPTARG"
