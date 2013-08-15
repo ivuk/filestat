@@ -1,6 +1,8 @@
 #!/bin/bash
 # vim: ts=2 tw=80
 
+#PS4='$(date "+%s.%N ($LINENO) + ")'
+
 # Reset ouput verbosity
 VerbositySet=0
 
@@ -35,6 +37,7 @@ echo "Total number of files in the target folder: ${#ArrayOfFilesInfo[@]}"
 # If it is, print the filenames
 # Else print the number of elements by type
 if [ "$VerbositySet" -eq 1 ]; then
+#	printf '%s|%s\n' "${!ArrayOfFilesInfo[@]}" "${ArrayOfFilesInfo[@]}" | column -t -s '|'
 	for elem in "${!ArrayOfFilesInfo[@]}"; do
 		echo "$elem%${ArrayOfFilesInfo[$elem]}"
 	done | column -t -s '%'
