@@ -1,6 +1,4 @@
 #!/bin/bash
-# vim: ts=2 tw=80
-
 #PS4='$(date "+%s.%N ($LINENO) + ")'
 
 # Reset ouput verbosity
