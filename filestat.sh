@@ -1,6 +1,8 @@
 #!/bin/bash
 #PS4='$(date "+%s.%N ($LINENO) + ")'
 
+set -euo pipefail
+
 # Reset ouput verbosity
 VerbositySet=0
 
